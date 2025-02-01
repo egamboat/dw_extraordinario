@@ -24,7 +24,7 @@ export class RenderingManager {
 		this.benchmarkResults = '';
 
 		this.updateRequested = false;
-		this.div = document.getElementById('threeJsDiv') as HTMLElement;
+		this.div = document.getElementById('root') as HTMLElement;
 
 		this.renderer = new THREE.WebGLRenderer({antialias: false});
 		this.renderer.shadowMap.enabled = true;
