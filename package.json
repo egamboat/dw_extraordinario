@@ -10,6 +10,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.6.0",
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
     "@types/three": "^0.166.0",
     "eslint": "^9.6.0",
     "globals": "^15.8.0",
@@ -21,6 +23,9 @@
     "@world-in-hand-controls/threejs-world-in-hand": "^0.0.17",
     "csv-parse": "^5.5.3",
     "lil-gui": "^0.19.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-router-dom": "^7.1.5",
     "three": "^0.166.1",
     "three-openll-labels": "^0.0.10"
   }

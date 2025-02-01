@@ -1,13 +1,15 @@
 # Uso
 Para clonar este repositorio localmente y ejecutar `npm install --legacy-peer-deps`, se instalarán todos los elementos necesarios mediante [npm](https://www.npmjs.com/).
-Cuando todas las dependencias se hayan instalado correctamente, puede ejecutar `npm run build` para compilar el software o `npm run dev` para ejecutarlo en modo de desarrollo.
-A continuación, ejecute `npm run preview` para alojar un servidor al que pueda acceder mediante un navegador web.
+Cuando todas las dependencias se hayan instalado correctamente, usa `npm run dev` para ejecutarlo en modo de desarroll o
+puede ejecutar `npm run build` para compilar el software.
 
-Al principio, el prototipo siempre carga un conjunto de datos predefinido.
-Con el botón de la parte superior izquierda, puede seleccionar sus propios conjuntos de datos para visualización. Estos conjuntos de datos deben estar en formato CSV y
+
+Con el botón de la parte superior izquierda, puede seleccionar sus propios conjuntos de datos para visualización, o usar el ejemplo qeu se encunetra en la carpeta data. Estos conjuntos de datos deben estar en formato CSV y
 contener solo datos numéricos, mientras que la primera columna debe llamarse `Documento` y se interpretará como una cadena de identificadores. \
+
 Usando la GUI en el lado derecho de la pantalla, seleccione un atlas de glifos y una asignación para `posición x`, `posición y` y `Tipo de glifo`.
 Una vez hecho esto, deberían aparecer los glifos. \
+
 Puede navegar en el plano de visualización usando un mouse, un panel táctil o una pantalla táctil.
 
 ## Dependencias
