@@ -5,7 +5,7 @@ export const Landing = () => {
 
   const navigate = useNavigate()
 
-  const goToIncio = () => {
+  const goToInicio = () => {
     navigate('/inicio', {
       replace: false,
     })
@@ -17,9 +17,9 @@ export const Landing = () => {
         {/* Navbar */}
         <nav className="bg-purple-800 text-white p-4">
           <div className="container mx-auto flex justify-between items-center">
-            <span className="text-xl font-bold">Mi Visor</span>
+            <span className="text-xl font-bold">Data Glifos</span>
             <div className="space-x-4">
-              <button onClick={goToIncio} className="hover:text-purple-200 cursor-pointer">Inicio</button>
+              <button onClick={goToInicio} className="hover:text-purple-200 cursor-pointer">Inicio</button>
               {/* <a href="#" className="hover:text-purple-200">Contacto</a> */}
             </div>
           </div>
@@ -34,7 +34,7 @@ export const Landing = () => {
               </h1>
               <button
                 className="bg-purple-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-purple-700 transition-colors duration-300 shadow-lg hover:shadow-xl cursor-pointer"
-                onClick={goToIncio}
+                onClick={goToInicio}
               >
                 Ir al Visor
               </button>

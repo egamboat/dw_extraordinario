@@ -119,6 +119,8 @@ export class RenderingManager {
 	}
 
 	protected render() {
+		console.log("🔄 Renderizando escena...");
+
 		this.updateRequested = false;
 
 		if (this.sceneManager.mappings?.instancingMethod !== InstancingMethod.None) {
