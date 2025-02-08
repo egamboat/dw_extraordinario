@@ -10,6 +10,7 @@ export const Landing = () => {
           <div className="container mx-auto flex justify-between items-center">
             <span className="text-xl font-bold">Data Glifos</span>
             <div className="space-x-4">
+              <a href="/login" className="hover:text-purple-200 cursor-pointer">Iniciar Sesión</a>
               <a href="/app.html" className="hover:text-purple-200 cursor-pointer">Inicio</a>
               {/* <a href="#" className="hover:text-purple-200">Contacto</a> */}
             </div>
