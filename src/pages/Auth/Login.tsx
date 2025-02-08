@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import { loginUser } from '../../services/Auth/AuthServices';
+import ResetPasswordModal from '../../componets/Auth/RessetPassModal';
 
 export const Login = () => {
 
@@ -8,14 +9,12 @@ export const Login = () => {
         username: '',
         password: ''
     });
-    const [error, setError] = useState<string>("")
-    const [succes, setSuccess] = useState<string>("")
+
     const [showPassword, setShowPassword] = useState(false);
+    const [showModalResset, setShowModalResset] = useState(false);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
-        setError("");
-        setSuccess("");
 
         try {
             const data = await loginUser(formData);
@@ -94,8 +93,9 @@ export const Login = () => {
                                 </button>
                             </div>
                         </div>
-                        {/*
                         <div className="flex items-center justify-between">
+                            {/*
+
                             <div className="flex items-center">
                                 <input
                                     id="remember-me"
@@ -107,12 +107,12 @@ export const Login = () => {
                                     Recordarme
                                 </label>
                             </div>
-
-                             <a href="#" className="text-sm font-medium text-blue-600 hover:text-blue-500">
-                                ¿Olvidaste tu contraseña?
-                            </a> 
-                        </div>
                         */}
+
+                            <button onClick={() => setShowModalResset(true)} className="text-sm font-medium text-blue-600 hover:text-blue-500 cursor-pointer ">
+                                ¿Olvidaste tu contraseña?
+                            </button>
+                        </div>
                         <button
                             type="submit"
                             className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
@@ -123,7 +123,7 @@ export const Login = () => {
 
                     <p className="mt-6 text-center text-sm text-gray-500">
                         ¿No tienes una cuenta?{' '}
-                        <a href="/register" className="font-medium text-blue-600 hover:text-blue-500">
+                        <a href="/auth/register" className="font-medium text-blue-600 hover:text-blue-500">
                             Regístrate
                         </a>
                     </p>
@@ -138,6 +138,7 @@ export const Login = () => {
                     className="w-full h-full object-cover"
                 />
             </div>
+            <ResetPasswordModal isOpen={showModalResset} onClose={() => setShowModalResset(false)} />
         </div>
     )
 }
