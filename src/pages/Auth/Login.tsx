@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Eye, EyeOff, Lock, User } from 'lucide-react';
 import { loginUser } from '../../services/Auth/AuthServices';
 import ResetPasswordModal from '../../componets/Auth/RessetPassModal';
+import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
 
@@ -9,7 +10,7 @@ export const Login = () => {
         username: '',
         password: ''
     });
-
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const [showModalResset, setShowModalResset] = useState(false);
 
@@ -18,8 +19,9 @@ export const Login = () => {
 
         try {
             const data = await loginUser(formData);
-            console.log(data)
-            console.log("Login Exitoso")
+
+            setTimeout(() => navigate("/user"), 1500);
+
         } catch (err) {
             console.log("Ocurrio un error: ", err)
         }

@@ -37,6 +37,8 @@ export const loginUser = async (userData: { username: string; password: string }
         }
 
         const data = await response.json();
+
+        localStorage.setItem("username", data.username);
         localStorage.setItem("token", data.token);
         return data;
     } catch (error: any) {

@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export const Landing = () => {
+  const [logged, setLogged] = useState(false)
 
+  useEffect(() => {
+
+    const token = localStorage.getItem("token");
+    const user = localStorage.getItem("username");
+
+    if (token && user) {
+      setLogged(true)
+    }
+  }, []);
   return (
     <>
       <div className="bg-gradient-to-b from-gray-100 to-purple-100">
@@ -10,9 +20,12 @@ export const Landing = () => {
           <div className="container mx-auto flex justify-between items-center">
             <span className="text-xl font-bold">Data Glifos</span>
             <div className="space-x-4">
-              <a href="/auth/login" className="hover:text-purple-200 cursor-pointer">Iniciar Sesión</a>
-              <a href="/app.html" className="hover:text-purple-200 cursor-pointer">Inicio</a>
-              {/* <a href="#" className="hover:text-purple-200">Contacto</a> */}
+              {!logged && (
+                <a href="/auth/login" className="hover:text-purple-200 cursor-pointer">Iniciar Sesión</a>
+              )}
+              {logged && (
+                <a href="/user/" className="hover:text-purple-200 cursor-pointer">Inicio</a>
+              )}
             </div>
           </div>
         </nav>
