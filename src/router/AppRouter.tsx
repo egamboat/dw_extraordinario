@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom"
-import { Landing } from "../pages/Landing";
+import { Landing, Guide } from "../pages";
 import { AuthRouter } from "./Auth/AuthRouter";
 import { UserRouter } from "./User/UserRouter";
 import PrivateRoute from "./PrivateRouters";
@@ -12,6 +12,7 @@ export const AppRouter = () => {
             <Routes>
 
                 <Route path="/" element={<Landing />} />
+                <Route path="guide" element={<Guide />} />
 
                 <Route element={<PublicRoute />}>
                     <Route path="/auth/*" element={<AuthRouter />} />
