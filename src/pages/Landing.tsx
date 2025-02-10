@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { NavbarPublic } from "../componets/NavbarPublic";
 
 export const Landing = () => {
-  const [logged, setLogged] = useState(false)
+  const [logged, setLogged] = useState<boolean>(false)
 
   useEffect(() => {
 
@@ -12,6 +13,7 @@ export const Landing = () => {
       setLogged(true)
     }
   }, []);
+
   return (
     <>
       <div className="bg-gray-100 min-h-screen" style={{
@@ -20,23 +22,10 @@ export const Landing = () => {
         backgroundPosition: "center",
         backgroundRepeat: "repeat"
       }}>
-
-        {/* Navbar */}
-        <nav className="bg-purple-800 text-white p-4">
-          <div className="container mx-auto flex justify-between items-center">
-            <span className="text-xl font-bold font-mono">Data Glifos</span>
-            <div className="space-x-4">
-              <a href="/guide" className="hover:text-purple-200 cursor-pointer font-bold">Guía</a>
-
-              {!logged && (
-                <a href="/auth/login" className="hover:text-purple-200 cursor-pointer font-bold">Iniciar Sesión</a>
-              )}
-              {logged && (
-                <a href="/user/" className="hover:text-purple-200 cursor-pointer font-bold">Inicio</a>
-              )}
-            </div>
-          </div>
-        </nav>
+        <NavbarPublic
+          logged={logged}
+          onLanding={true}>
+        </NavbarPublic>
 
         <main className="container mx-auto m-4 lg:m-10 p-0">
           <div className="flex flex-col lg:flex-row items-center lg:justify-between h-full mt-4">
