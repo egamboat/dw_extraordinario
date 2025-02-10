@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Menu, X, Home, TestTubesIcon, Users, LogOut } from 'lucide-react';
 
 const UserLayout = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const menuItems = [
     { title: 'Inicio', icon: <Home size={20} />, path: '/user/' },
     { title: 'Benchmarks', icon: <TestTubesIcon size={20} />, path: '/user/results' },
-    { title: 'Cuenta', icon: <Users size={20} />, path: '/#' },
+    { title: 'Cuenta', icon: <Users size={20} />, path: '/user/account' },
   ];
 
   const handleLogout = () => {
@@ -39,7 +41,7 @@ const UserLayout = ({ children }: any) => {
       >
         {/* Header del Sidebar */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-bold text-gray-800">Data Glifos</h2>
+          <h2 className="text-xl font-bold text-gray-800 font-mono">Data Glifos</h2>
           <button
             onClick={() => setIsOpen(false)}
             className="p-2 rounded-md lg:hidden hover:bg-gray-100"
@@ -53,13 +55,13 @@ const UserLayout = ({ children }: any) => {
           <ul className="space-y-2">
             {menuItems.map((item) => (
               <li key={item.path}>
-                <a
-                  href={item.path}
-                  className="flex items-center gap-4 p-2 text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900"
+                <button
+                  onClick={() => navigate(item.path)}
+                  className="flex items-center gap-4 p-2 text-gray-600 rounded-md hover:bg-gray-100 hover:text-gray-900 w-full text-left cursor-pointer"
                 >
                   {item.icon}
                   <span>{item.title}</span>
-                </a>
+                </button>
               </li>
             ))}
           </ul>
