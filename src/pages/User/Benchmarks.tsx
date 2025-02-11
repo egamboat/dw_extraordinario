@@ -6,8 +6,10 @@ import {
   Visibility as VisibilityIcon,
   Add as AddIcon
 } from '@mui/icons-material';
+import { useNavigate } from 'react-router-dom';
 
 export const Benchmarks = () => {
+  const navigate = useNavigate()
 
   const files: any = [
     // { id: 1, name: "documento1.pdf", date: "2024-02-09" },
@@ -28,7 +30,7 @@ export const Benchmarks = () => {
   };
 
   const handleAddFile = () => {
-    console.log('HAcer un benchmark');
+    navigate('/user/')
   };
 
   return (
@@ -75,7 +77,7 @@ export const Benchmarks = () => {
             {files.length === 0 ? (
               <TableRow>
                 <TableCell colSpan={3} align="center" sx={{ fontStyle: 'italic', color: 'gray', py: 3 }}>
-                  Actualmente no cuenta con archivos disponibles, puede probar a subir uno.
+                  Para realizar BenchMarks debes dirigirte a archivos y seleccionar el que desees.
                 </TableCell>
               </TableRow>
             ) : (

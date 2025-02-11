@@ -1,6 +1,6 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, IconButton, Typography, Box } from '@mui/material';
-
+import { useUserContext } from '../../services/User/context/UserContext';
 interface UserData {
     email: string;
     name: string;
@@ -14,6 +14,7 @@ export const Account = () => {
         username: 'juanperez123'
     };
 
+    const { user } = useUserContext()
     return (
         <Box sx={{ p: 3 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
@@ -31,7 +32,7 @@ export const Account = () => {
             <div className="p-6 space-y-6">
                 <div>
                     <h3 className="text-sm font-medium text-gray-500">Nombre</h3>
-                    <p className="mt-1 text-lg text-gray-900">{userData.name}</p>
+                    <p className="mt-1 text-lg text-gray-900">{user}</p>
                 </div>
 
                 <div>

@@ -38,7 +38,7 @@ export const Register = () => {
             localStorage.setItem("username", data.username);
 
             setSuccess("Registro exitoso. Redirigiendo...");
-            setTimeout(() => (window.location.href = "/dashboard"), 2000); // Redirige después de 2s
+            setTimeout(() => (window.location.href = "/user"), 2000); // Redirige después de 2s
         } catch (error: any) {
             setError(error.message);
         }
