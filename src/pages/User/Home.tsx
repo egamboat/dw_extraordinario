@@ -4,26 +4,30 @@ import {
     Delete as DeleteIcon,
     Edit as EditIcon,
     Visibility as VisibilityIcon,
-    Add as AddIcon
+    Add as AddIcon,
 } from '@mui/icons-material';
-
-import { deleteFile, LoadFiles } from '../../services/User/Home';
+import { Tooltip } from '@mui/material';
+import { deleteFile, loadFiles, loadFile } from '../../services/User/Home';
 import { useUserContext } from '../../services/User/context/UserContext';
 import { CSVFile } from '../../services/User/csv_types';
 import { toast } from 'react-toastify';
 import UploadModal from '../../componets/User/UploadModal';
+import EditModal from '../../componets/User/EditModal';
+import { DownloadCloudIcon } from 'lucide-react';
 
 
 export const HomeDashboard = () => {
     const { token } = useUserContext()
-    const [files, setFiles] = useState<CSVFile[]>([])
+    const [files, setFiles] = useState<CSVFile[]>([]);
+    const [file, setFile] = useState<CSVFile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [showModal, setShowModal] = useState(false);
+    const [showModalCreate, setShowModalCreate] = useState(false);
+    const [showModalEdit, setShowModalEdit] = useState(false);
 
     const fetchFiles = async () => {
         try {
-            const data = await LoadFiles(token);
+            const data = await loadFiles(token);
             setFiles(data);
         } catch (err) {
             setError(err instanceof Error ? err.message : "Error desconocido");
@@ -45,12 +49,16 @@ export const HomeDashboard = () => {
         }
     };
 
-    useEffect(() => {
-        fetchFiles();
-    }, [])
 
-    const handleEdit = (id: number) => {
-        console.log('Editar archivo:', id);
+    const handleEdit = async (fileId: number) => {
+        console.log('Editar archivo:', fileId);
+        try {
+            const data: CSVFile = await loadFile(token, fileId);
+            setFile(data);
+            setShowModalEdit(true);
+        } catch {
+            toast.error("Ocurrió un error al cargar el archivo, inténtelo de nuevo.")
+        }
     };
 
     const handleOpen = (id: number) => {
@@ -62,6 +70,23 @@ export const HomeDashboard = () => {
         toast.success("Archivo subido correctamente.");
     };
 
+    const handleFileUpdated = (updatedFile: CSVFile) => {
+        setFiles(files.map(f => (f.id === updatedFile.id ? updatedFile : f)));
+        toast.success("Archivo actualizado correctamente.");
+    };
+
+    const handleDownload = (fileUrl: string) => {
+        const link = document.createElement('a');
+        link.href = fileUrl;
+        link.setAttribute('download', ''); // Esto sugiere la descarga sin cambiar el nombre
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    useEffect(() => {
+        fetchFiles();
+    }, [])
     return (
         <>
             <Box sx={{ p: 3 }}>
@@ -78,7 +103,7 @@ export const HomeDashboard = () => {
                     <Button
                         variant="contained"
                         startIcon={<AddIcon />}
-                        onClick={() => setShowModal(true)}
+                        onClick={() => setShowModalCreate(true)}
                         sx={{ backgroundColor: "#b77ee0" }}
                     >
                         Agregar Archivo
@@ -128,6 +153,11 @@ export const HomeDashboard = () => {
                                             <IconButton color="error" onClick={() => handleDelete(file.id)} title="Eliminar">
                                                 <DeleteIcon />
                                             </IconButton>
+                                            <Tooltip title={file.file}>
+                                                <IconButton onClick={() => handleDownload(file.file)} title="Descargar" sx={{ color: 'green' }}>
+                                                    <DownloadCloudIcon />
+                                                </IconButton>
+                                            </Tooltip>
                                         </TableCell>
                                     </TableRow>
                                 ))
@@ -137,20 +167,29 @@ export const HomeDashboard = () => {
                 </TableContainer>
             </Box>
 
-            <Modal open={showModal} onClose={() => setShowModal(false)}>
+            <Modal open={showModalCreate} onClose={() => setShowModalCreate(false)}>
                 <Box sx={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    width: 500,
-                    p: 4,
-                    borderRadius: 2,
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, p: 4, borderRadius: 2,
                 }}>
                     <UploadModal
                         token={token}
-                        onClose={() => setShowModal(false)}
+                        onClose={() => { setShowModalCreate(false) }}
                         onFileUploaded={handleFileUploaded}
+                    />
+                </Box>
+            </Modal>
+
+            <Modal open={showModalEdit} onClose={() => setShowModalEdit(false)}>
+                <Box sx={{
+                    position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, p: 4, borderRadius: 2,
+                }}>
+                    <EditModal
+                        token={token}
+                        onClose={() => {
+                            setShowModalEdit(false); setFile(null)
+                        }}
+                        onFileUpdate={handleFileUpdated}
+                        file={file}
                     />
                 </Box>
             </Modal>
