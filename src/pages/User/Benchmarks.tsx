@@ -48,7 +48,7 @@ export const Benchmarks = () => {
 
         <Button
           variant="contained"
-          color="primary"
+          sx={{ backgroundColor: "#b77ee0" }}
           startIcon={<AddIcon />}
           onClick={handleAddFile}
         >

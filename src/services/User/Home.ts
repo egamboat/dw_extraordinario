@@ -1,21 +1,65 @@
-// const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
+import { CSVFile } from "./csv_types";
+const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
 
-// export const LoadFiles = async ({ token }: string): Promise<any> => {
-//     try {
-//         const response = await fetch(`${API_BASE_URL}api/csv_files/`, {
-//             method: "GET",
-//             headers: {
-//                 "Authorization": `Token ${token}`,
-//                 "Content-Type": "application/json",
-//             },
-//         });
 
-//         if (!response.ok) {
-//             throw new Error("Ocurrió un error al establecer la nueva contraseña.");
-//         }
+export const uploadFile = async (token: string|null, formData: FormData): Promise<CSVFile> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}api/csv_files/`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Token ${token}`,
+            },
+            body: formData,
+        });
 
-//         return await response.json();
-//     } catch (error) {
-//         throw new Error(error instanceof Error ? error.message : "Error de conexión");
-//     }
-// };
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        return await response.json(); // Retorna el archivo creado
+    } catch (error) {
+        console.error("Error al subir archivo:", error);
+        throw new Error(error instanceof Error ? error.message : "Error de conexión");
+    }
+};
+
+
+export const LoadFiles = async (token: string | null): Promise<CSVFile[]> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}api/csv_files/`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+
+        return await response.json(); // Retorna un array
+    } catch (error) {
+        console.error("Error al cargar archivos:", error);
+        throw new Error(error instanceof Error ? error.message : "Error de conexión");
+    }
+};
+
+export const deleteFile = async (token: string | null, fileId: number): Promise<void> => {
+    try {
+        const response = await fetch(`${API_BASE_URL}api/csv_files/${fileId}/`, {
+            method: "DELETE",
+            headers: {
+                "Authorization": `Token ${token}`,
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Error ${response.status}: ${response.statusText}`);
+        }
+    } catch (error) {
+        console.error("Error al eliminar archivo:", error);
+        throw new Error(error instanceof Error ? error.message : "Error de conexión");
+    }
+};
