@@ -15,3 +15,14 @@ body {
     border: none;
     z-index: 0;
 }
+
+.file-label {
+    color: purple;
+    font-weight: bold;
+    font-family: monospace;
+  }
+  
+  .file-name {
+    font-family: monospace;
+  }
+  

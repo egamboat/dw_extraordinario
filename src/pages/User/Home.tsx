@@ -64,9 +64,12 @@ export const HomeDashboard = () => {
     const handleOpen = async (fileId: number) => {
         try {
             const data: CSVFile = await loadFile(token, fileId);
-            localStorage.setItem("csv_url", data.file);
-            toast.warning("El archivo se abrirá en una nueva pestaña.")
 
+            localStorage.setItem("csv_url", data.file);
+            localStorage.setItem("csv_name", data.name);
+
+            toast.warning("El archivo se abrirá en una nueva pestaña.")
+            
             window.open("/app.html", "_blank");
         } catch {
             toast.error("Ocurrió un error al cargar el archivo, inténtelo de nuevo.")

@@ -1,9 +1,9 @@
 import * as THREE from 'three';
-import {GlyphAtlas, GlyphLoader} from './GlyphLoader.ts';
-import {type Mappings, MappingsUpdate} from './GuiManager.ts';
-import {RenderingManager} from './RenderingManager.ts';
-import {PickingHandler} from "./PickingHandler.ts";
-import {GlyphToCsvMapping, QuadTree} from "./QuadTree.ts";
+import { GlyphAtlas, GlyphLoader } from './GlyphLoader.ts';
+import { type Mappings, MappingsUpdate } from './GuiManager.ts';
+import { RenderingManager } from './RenderingManager.ts';
+import { PickingHandler } from "./PickingHandler.ts";
+import { GlyphToCsvMapping, QuadTree } from "./QuadTree.ts";
 
 export type CSV = Array<Array<string>>;
 type CsvAndIndices = {
@@ -129,7 +129,7 @@ export class SceneManager {
 		this.staticElements.add(this.idBackground);
 
 		const axesHelper = new THREE.AxesHelper(1);
-  		this.staticElements.add(axesHelper);
+		this.staticElements.add(axesHelper);
 	}
 
 	public set csv(value: CSV) {
@@ -499,7 +499,7 @@ export class SceneManager {
 
 		const indices = new Array<number>();
 		for (const name of selectedGlyphName) {
-			indices.push(this._glyphAtlas!.glyphs.findIndex((value: THREE.Object3D) => { return name === value.name; } ));
+			indices.push(this._glyphAtlas!.glyphs.findIndex((value: THREE.Object3D) => { return name === value.name; }));
 		}
 
 		return {
@@ -540,13 +540,13 @@ export class SceneManager {
 	protected sceneCanBeDrawn(): boolean {
 		return (
 			this._csv !== undefined
-            && this._csv.csv[0].length !== 0
-            && this._mappings !== undefined
-            && this._mappings.basicMappings.glyphAtlas !== ''
-            && this._mappings.requiredMappings.positionX !== ''
-            && this._mappings.requiredMappings.positionY !== ''
-            && this._mappings.requiredMappings.glyphType !== ''
-            && this._glyphAtlas !== undefined
+			&& this._csv.csv[0].length !== 0
+			&& this._mappings !== undefined
+			&& this._mappings.basicMappings.glyphAtlas !== ''
+			&& this._mappings.requiredMappings.positionX !== ''
+			&& this._mappings.requiredMappings.positionY !== ''
+			&& this._mappings.requiredMappings.glyphType !== ''
+			&& this._glyphAtlas !== undefined
 			&& this._glyphQuadTree !== undefined
 		);
 	}
@@ -701,5 +701,5 @@ export class SceneManager {
 		if (warnings.wrapAround) console.warn('At least one value used to select the glyph type (' + warnings.wrapAround + ') is larger than the amount of available types. This value will be wrapped around.');
 		if (warnings.noValidVariant) console.warn('No valid variant could be found for the at least row ' + warnings.noValidVariant + '. The base model of the selected type will be used.');
 	}
-	  
+
 }

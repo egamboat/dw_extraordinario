@@ -1,16 +1,21 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Software Map</title>
-    <link rel="stylesheet" href="./src/styles/app.css" />
-  </head>
-  <body>
-    <script type="module" src="./src/main.ts"></script>
-    <!-- <div id="buttons">
-      <label for="fileUpload">Sube tu dataset</label>
-      <input type="file" id="fileUpload" value="Selecciona un archivo para subir." accept=".csv" />
-    </div> -->
-    <div id="root"></div>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Software Map</title>
+  <link rel="stylesheet" href="./src/styles/app.css" />
+</head>
+
+<body>
+  <script type="module" src="./src/main.ts"></script>
+  <p>
+    <strong class="file-label">Nombre del archivo:</strong>
+    <span id="csv-name" class="file-name"></span>
+  </p>
+
+
+  <div id="root"></div>
+</body>
+
 </html>
