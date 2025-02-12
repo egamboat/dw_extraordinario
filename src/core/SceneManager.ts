@@ -64,7 +64,6 @@ export class SceneManager {
 
 	protected setUpStaticElements(): void {
 		this.scene.background = new THREE.Color(0xfafafa);
-
 		// Lighting
 		this.staticElements.add(new THREE.AmbientLight(0xffffff));
 		this.spotLight = new THREE.SpotLight(0xffffff, 1, 0, Math.PI / 2.1, 0, 0);
@@ -128,6 +127,9 @@ export class SceneManager {
 		});
 		this.idBackground = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), backgroundMaterial);
 		this.staticElements.add(this.idBackground);
+
+		const axesHelper = new THREE.AxesHelper(1);
+  		this.staticElements.add(axesHelper);
 	}
 
 	public set csv(value: CSV) {
@@ -699,4 +701,5 @@ export class SceneManager {
 		if (warnings.wrapAround) console.warn('At least one value used to select the glyph type (' + warnings.wrapAround + ') is larger than the amount of available types. This value will be wrapped around.');
 		if (warnings.noValidVariant) console.warn('No valid variant could be found for the at least row ' + warnings.noValidVariant + '. The base model of the selected type will be used.');
 	}
+	  
 }

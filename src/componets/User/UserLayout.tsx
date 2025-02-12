@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Menu, X, Home, TestTubesIcon, Users, LogOut } from 'lucide-react';
+import { logoutUser } from '../../services/Auth/AuthServices';
 
 const UserLayout = ({ children }: any) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,11 +13,14 @@ const UserLayout = ({ children }: any) => {
     { title: 'Cuenta', icon: <Users size={20} />, path: '/user/account' },
   ];
 
-  const handleLogout = () => {
-    // Aquí puedes agregar la lógica de logout
-    console.log('Cerrando sesión...');
-  };
-
+  const handleLogout = async () => {
+    try {
+        await logoutUser();
+        window.location.href = "/auth/login";  
+    } catch (error:any) {
+        console.error("Error al cerrar sesión:", error.message);
+    }
+};
 
   return (
     <div className="flex h-screen bg-gray-100">

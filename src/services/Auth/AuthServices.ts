@@ -86,3 +86,31 @@ export const newPassword = async (userData: { token:string; new_password: string
         throw new Error(error instanceof Error ? error.message : "Error de conexión");
     }
 };
+
+export const logoutUser = async () => {
+    try {
+        const token = localStorage.getItem("token"); // Obtener el token almacenado
+
+        if (!token) {
+            throw new Error("No hay usuario autenticado");
+        }
+
+        const response = await fetch(`${API_BASE_URL}users/logout/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Token ${token}`
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error("Error al cerrar sesión");
+        }
+
+        localStorage.clear();
+
+        return { message: "Sesión cerrada exitosamente" };
+    } catch (error: any) {
+        throw new Error(error.message || "Error al cerrar sesión");
+    }
+};

@@ -57,7 +57,7 @@ export const Register = () => {
             {/* Sección de imagen - lado derecho */}
             <div className="hidden lg:block lg:w-1/2">
                 <img
-                    src="src/data/img/ejecutandose2.jpeg"
+                    src="/src/data/img/ejecutandose2.jpeg"
                     alt="Register"
                     className="w-full h-full object-cover"
                 />

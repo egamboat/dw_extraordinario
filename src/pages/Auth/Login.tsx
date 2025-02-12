@@ -111,7 +111,13 @@ export const Login = () => {
                             </div>
                         */}
 
-                            <button onClick={() => setShowModalResset(true)} className="text-sm font-medium text-blue-600 hover:text-blue-500 cursor-pointer ">
+                            <button
+                                onClick={(event) => {
+                                    event.preventDefault();
+                                    setShowModalResset(true);
+                                }}
+                                className="text-sm font-medium text-blue-600 hover:text-blue-500 cursor-pointer"
+                            >
                                 ¿Olvidaste tu contraseña?
                             </button>
                         </div>
@@ -130,17 +136,17 @@ export const Login = () => {
                         </a>
                     </p>
                 </div>
-            </div>
+            </div >
 
             {/* Sección de imagen - lado derecho */}
-            <div className="hidden lg:block lg:w-1/2">
+            < div className="hidden lg:block lg:w-1/2" >
                 <img
-                    src="src/data/img/ejecutandose2.jpeg"
+                    src="/src/data/img/ejecutandose2.jpeg"
                     alt="Login"
                     className="w-full h-full object-cover"
                 />
-            </div>
+            </div >
             <ResetPasswordModal isOpen={showModalResset} onClose={() => setShowModalResset(false)} />
-        </div>
+        </div >
     )
 }

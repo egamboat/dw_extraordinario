@@ -1,5 +1,7 @@
 import { defineConfig } from 'vite';
 import tailwindcss from '@tailwindcss/vite'
+import react from '@vitejs/plugin-react';
+
 
 export default defineConfig({
 	assetsInclude: ['**/*.glb'],
@@ -7,7 +9,7 @@ export default defineConfig({
 		target: 'es2022'
 	},
 
-	plugins: [    tailwindcss(),  ],
+	plugins: [    tailwindcss(), react()  ],
 
 	base: '/'
 });

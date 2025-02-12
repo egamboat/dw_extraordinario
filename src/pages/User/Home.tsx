@@ -61,8 +61,16 @@ export const HomeDashboard = () => {
         }
     };
 
-    const handleOpen = (id: number) => {
-        console.log('Abrir archivo:', id);
+    const handleOpen = async (fileId: number) => {
+        try {
+            const data: CSVFile = await loadFile(token, fileId);
+            localStorage.setItem("csv_url", data.file);
+            toast.warning("El archivo se abrirá en una nueva pestaña.")
+
+            window.open("/app.html", "_blank");
+        } catch {
+            toast.error("Ocurrió un error al cargar el archivo, inténtelo de nuevo.")
+        }
     };
 
     const handleFileUploaded = (newFile: CSVFile) => {
@@ -119,7 +127,7 @@ export const HomeDashboard = () => {
                                 </TableCell>
 
                                 <TableCell sx={{ fontFamily: 'monospace', fontWeight: 600, fontSize: '1.1rem' }}>
-                                    Fecha
+                                    Fecha Subida
                                 </TableCell>
 
                                 <TableCell align="center" sx={{ fontFamily: 'monospace', fontWeight: 600, fontSize: '1.1rem' }}>
@@ -154,7 +162,7 @@ export const HomeDashboard = () => {
                                                 <DeleteIcon />
                                             </IconButton>
                                             <Tooltip title={file.file}>
-                                                <IconButton onClick={() => handleDownload(file.file)} title="Descargar" sx={{ color: 'green' }}>
+                                                <IconButton onClick={() => handleDownload(file.file)} sx={{ color: 'green' }}>
                                                     <DownloadCloudIcon />
                                                 </IconButton>
                                             </Tooltip>
