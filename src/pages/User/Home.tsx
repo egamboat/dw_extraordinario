@@ -86,7 +86,7 @@ export const HomeDashboard = () => {
     const handleDownload = (fileUrl: string) => {
         const link = document.createElement('a');
         link.href = fileUrl;
-        link.setAttribute('download', ''); // Esto sugiere la descarga sin cambiar el nombre
+        link.setAttribute('download', '');
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
@@ -139,7 +139,7 @@ export const HomeDashboard = () => {
                             {files.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={3} align="center" sx={{ fontStyle: 'italic', color: 'gray', py: 3 }}>
-                                        {loading ? "Actualmente no cuenta con archivos disponibles, puede probar a subir uno." : "Cargando..."}
+                                        {loading ? "Cargando...": "Actualmente no cuenta con archivos disponibles, puede probar a subir uno." }
                                     </TableCell>
                                 </TableRow>
                             ) : (

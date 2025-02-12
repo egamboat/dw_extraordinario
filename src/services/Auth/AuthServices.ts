@@ -13,7 +13,8 @@ export const registerUser = async (userData: any) => {
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.message || "Error en el registro");
+            const errorMessage = data.detail || data.message || "Error en el registro";
+            throw new Error(errorMessage);
         }
 
         return data;
@@ -21,6 +22,7 @@ export const registerUser = async (userData: any) => {
         throw new Error(error.message || "Error de conexión");
     }
 };
+
 
 export const loginUser = async (userData: { username: string; password: string }) => {
     try {
@@ -32,12 +34,13 @@ export const loginUser = async (userData: { username: string; password: string }
             body: JSON.stringify(userData),
         });
 
+
         if (!response.ok) {
-            throw new Error("Credenciales incorrectas");
+            const errorData = await response.json();
+            throw new Error(errorData.detail || "Credenciales incorrectas");
         }
 
         const data = await response.json();
-
         localStorage.setItem("username", data.username);
         localStorage.setItem("token", data.token);
         return data;
@@ -57,7 +60,7 @@ export const resetPassword = async (userData: { email: string }): Promise<any> =
         });
 
         if (!response.ok) {
-            throw new Error( "No se encontró el correo electrónico o está incorrecto.");
+            throw new Error("No se encontró el correo electrónico o está incorrecto.");
         }
 
         return await response.json();
@@ -67,7 +70,7 @@ export const resetPassword = async (userData: { email: string }): Promise<any> =
 };
 
 
-export const newPassword = async (userData: { token:string; new_password: string }): Promise<any> => {
+export const newPassword = async (userData: { token: string; new_password: string }): Promise<any> => {
     try {
         const response = await fetch(`${API_BASE_URL}users/password-reset/confirm/`, {
             method: "POST",
@@ -78,7 +81,7 @@ export const newPassword = async (userData: { token:string; new_password: string
         });
 
         if (!response.ok) {
-            throw new Error( "Ocurrió un error al establecer la nueva contraseña.");
+            throw new Error("Ocurrió un error al establecer la nueva contraseña.");
         }
 
         return await response.json();

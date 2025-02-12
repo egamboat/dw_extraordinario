@@ -20,29 +20,31 @@ export const Register = () => {
         e.preventDefault();
         setError("");
         setSuccess("");
-
+    
         if (formData.password !== formData.confirmPassword) {
             setError("Las contraseñas no coinciden");
             return;
         }
-
+    
         try {
             const data = await registerUser({
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
             });
-
+    
             localStorage.setItem("token", data.token);
             localStorage.setItem("userId", data.user_id);
             localStorage.setItem("username", data.username);
-
+    
             setSuccess("Registro exitoso. Redirigiendo...");
-            setTimeout(() => (window.location.href = "/user"), 2000); // Redirige después de 2s
+            setTimeout(() => (window.location.href = "/user"), 2000);
         } catch (error: any) {
+            console.error("Error en el registro:", error);
             setError(error.message);
         }
     };
+    
 
     const handleChange = (e: any) => {
         setFormData({
@@ -184,7 +186,7 @@ export const Register = () => {
 
                         <button
                             type="submit"
-                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 cursor-pointer"
                         >
                             Registrarse
                         </button>
@@ -192,7 +194,7 @@ export const Register = () => {
 
                     <p className="mt-6 text-center text-sm text-gray-500">
                         ¿Ya tienes una cuenta?{' '}
-                        <a href="/auth/login" className="font-medium text-blue-600 hover:text-blue-500">
+                        <a href="/auth/login" className="font-medium text-purple-600 hover:text-blue-500">
                             Iniciar Sesión
                         </a>
                     </p>

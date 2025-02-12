@@ -59,6 +59,9 @@ export const Guide = () => {
                                 <p className="text-gray-600 text-lg">
                                     {stepsGuide[currentStep].description}
                                 </p>
+                                <p className="text-gray-800 text-xs">
+                                    {stepsGuide[currentStep].note}
+                                </p>
                             </div>
 
                             <div className="flex items-center justify-center">
