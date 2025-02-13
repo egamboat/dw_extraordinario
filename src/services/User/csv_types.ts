@@ -6,3 +6,9 @@ export interface CSVFile {
     file: string; // URL del archivo
     uploaded_at: string;
 }
+
+export interface CSVInfo {
+    columns: string[];
+    rowCount: number;
+    previewRows: string[][];
+}

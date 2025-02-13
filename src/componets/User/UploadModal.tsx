@@ -39,7 +39,7 @@ const UploadModal: React.FC<UploadModalProps> = ({ token, onClose, onFileUploade
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50">
             <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-                <h2 className="text-xl font-semibold mb-4">Subir Archivo</h2>
+                <h2 className="text-xl font-semibold mb-4 font-mono">Subir Archivo</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <input
                         type="text"

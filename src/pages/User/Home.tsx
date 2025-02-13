@@ -14,6 +14,8 @@ import { toast } from 'react-toastify';
 import UploadModal from '../../componets/User/UploadModal';
 import EditModal from '../../componets/User/EditModal';
 import { DownloadCloudIcon } from 'lucide-react';
+import CSVModal from '../../componets/User/InfoCsvModal';
+import { analyzeCSV } from '../../services/User/helpers/csv_analizer';
 
 
 export const HomeDashboard = () => {
@@ -24,6 +26,8 @@ export const HomeDashboard = () => {
     const [error, setError] = useState<string | null>(null);
     const [showModalCreate, setShowModalCreate] = useState(false);
     const [showModalEdit, setShowModalEdit] = useState(false);
+    const [showModalCSV, setShowModalCSV] = useState(false);
+    const [csvInfo, setCsvInfo] = useState<any>(null);
 
     const fetchFiles = async () => {
         try {
@@ -68,12 +72,23 @@ export const HomeDashboard = () => {
             localStorage.setItem("csv_url", data.file);
             localStorage.setItem("csv_name", data.name);
 
-            toast.warning("El archivo se abrirá en una nueva pestaña.")
-            
-            window.open("/app.html", "_blank");
+            const analyzedData = await analyzeCSV(data.file);
+            if (analyzedData) {
+                setFile(data);
+                setCsvInfo(analyzedData);
+                setShowModalCSV(true);
+            } else {
+                toast.error("Error al analizar el CSV.");
+            }
         } catch {
             toast.error("Ocurrió un error al cargar el archivo, inténtelo de nuevo.")
         }
+    };
+
+    const handleConfirm = () => {
+        setShowModalCSV(false);
+        toast.warning("El archivo se abrirá en una nueva pestaña.");
+        window.open("/app.html", "_blank");
     };
 
     const handleFileUploaded = (newFile: CSVFile) => {
@@ -142,7 +157,7 @@ export const HomeDashboard = () => {
                             {files.length === 0 ? (
                                 <TableRow>
                                     <TableCell colSpan={3} align="center" sx={{ fontStyle: 'italic', color: 'gray', py: 3 }}>
-                                        {loading ? "Cargando...": "Actualmente no cuenta con archivos disponibles, puede probar a subir uno." }
+                                        {loading ? "Cargando..." : "Actualmente no cuenta con archivos disponibles, puede probar a subir uno."}
                                     </TableCell>
                                 </TableRow>
                             ) : (
@@ -204,6 +219,26 @@ export const HomeDashboard = () => {
                     />
                 </Box>
             </Modal>
+
+            {file && csvInfo && (
+                <Modal open={showModalCSV} onClose={() => setShowModalCSV(false)}>
+                    <Box sx={{
+                        position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', width: 500, p: 4, borderRadius: 2,
+                    }}>
+                        <CSVModal
+                            isOpen={showModalCSV}
+                            onClose={() => setShowModalCSV(false)}
+                            onConfirm={handleConfirm}
+                            fileName={file.name}
+                            description={file.description}
+                            rowCount={csvInfo.rowCount}
+                            columns={csvInfo.columns}
+                            previewRows={csvInfo.previewRows}
+                        />
+                    </Box>
+                </Modal>
+
+            )}
         </>
     );
 };
