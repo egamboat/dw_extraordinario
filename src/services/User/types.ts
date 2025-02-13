@@ -12,3 +12,10 @@ export interface CSVInfo {
     rowCount: number;
     previewRows: string[][];
 }
+
+export interface UserData {
+    email: string;
+    first_name: string;
+    last_name: string;
+    username: string;
+}

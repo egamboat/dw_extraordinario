@@ -9,10 +9,10 @@ import {
 import { Tooltip } from '@mui/material';
 import { deleteFile, loadFiles, loadFile } from '../../services/User/Home';
 import { useUserContext } from '../../services/User/context/UserContext';
-import { CSVFile } from '../../services/User/csv_types';
+import { CSVFile } from '../../services/User/types';
 import { toast } from 'react-toastify';
 import UploadModal from '../../componets/User/UploadModal';
-import EditModal from '../../componets/User/EditModal';
+import EditModal from '../../componets/User/EditCsvModal';
 import { DownloadCloudIcon } from 'lucide-react';
 import CSVModal from '../../componets/User/InfoCsvModal';
 import { analyzeCSV } from '../../services/User/helpers/csv_analizer';

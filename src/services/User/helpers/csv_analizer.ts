@@ -1,4 +1,4 @@
-import { CSVInfo } from "../csv_types";
+import { CSVInfo } from "../types";
 
 export const analyzeCSV = async (fileUrl: string): Promise<CSVInfo | null> => {
     try {

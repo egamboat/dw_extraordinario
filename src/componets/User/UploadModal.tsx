@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { uploadFile } from "../../services/User/Home";
-import { CSVFile } from "../../services/User/csv_types";
+import { CSVFile } from "../../services/User/types";
 
 interface UploadModalProps {
     token: string | null;

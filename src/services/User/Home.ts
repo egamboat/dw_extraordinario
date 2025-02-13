@@ -1,4 +1,4 @@
-import { CSVFile } from "./csv_types";
+import { CSVFile } from "./types";
 const API_BASE_URL = import.meta.env.VITE_APP_API_URL;
 
 
