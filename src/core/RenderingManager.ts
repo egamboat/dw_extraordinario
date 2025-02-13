@@ -242,9 +242,9 @@ export class RenderingManager {
 
 	public benchmark(): void {
 		console.log('\n----------\nStarting benchmark...\n----------\n\n');
-
+	
 		if (this.sceneManager.mappings === undefined) return;
-
+	
 		const numFrames = this.sceneManager.mappings.numberBenchmarkingFrames;
 		const warmupFactor = 0.5;
 		let remainingFrames = Math.round(numFrames * (1 + warmupFactor));
@@ -254,38 +254,38 @@ export class RenderingManager {
 		const rotationMatrix = new THREE.Matrix4().makeRotationAxis(new THREE.Vector3(0, 1, 0), 2 * Math.PI / Math.round(numFrames * (1 + warmupFactor)));
 		const origin = new THREE.Vector3(0, 0, 0);
 		let frameIndex = 0;
-
+	
 		this.resetCamera();
-
+	
 		const deltaTimes = new Array<number>(numFrames);
 		const callback = () => {
 			if (remainingFrames <= numFrames) {
 				oldBegin = begin;
 				begin = performance.now();
 			}
-
+	
 			this.render();
-
+	
 			if (remainingFrames < numFrames) {
 				end = performance.now();
 				deltaTimes[frameIndex++] = end - oldBegin;
 			}
-
+	
 			--remainingFrames;
 			if (remainingFrames < 0) getResult();
-
+	
 			this.camera.position.applyMatrix4(rotationMatrix);
 			this.camera.lookAt(origin);
-
+	
 			if (remainingFrames >= 0) requestAnimationFrame(callback);
 		};
-
+	
 		const getResult = () => {
 			this.benchmarkResults = 'Resolution,InstancingMethod,QuadtreeDepth,GlyphAtlas,UseShadows,Frametime,Framerate\n';
 			const resolution = this.renderer.getSize(new THREE.Vector2);
-			const sumTime = deltaTimes.reduce((previousValue: number, currentValue: number) => { return previousValue + currentValue; }, 0);
+			const sumTime = deltaTimes.reduce((previousValue: number, currentValue: number) => previousValue + currentValue, 0);
 			console.log('Elapsed time: ' + sumTime + 'ms', 'Average fps: ' + numFrames / (sumTime / 1000));
-
+	
 			deltaTimes.sort((a, b) => a - b);
 			const maxFT = deltaTimes[deltaTimes.length - 1];
 			const zeroPointOneHFT = deltaTimes[Math.round((deltaTimes.length - 1) * 0.999)];
@@ -294,53 +294,78 @@ export class RenderingManager {
 			const oneLFT = deltaTimes[Math.round((deltaTimes.length - 1) * 0.01)];
 			const zeroPointOneLFT = deltaTimes[Math.round((deltaTimes.length - 1) * 0.001)];
 			const minFT = deltaTimes[0];
-
+	
 			console.log('Min fps: ' + 1 / (maxFT / 1000) + ', 0.1% low: ' + 1 / (zeroPointOneHFT / 1000) + ', 1% low: ' + 1 / (oneHFT / 1000)
 				+ ', median: ' + 1 / (medFT / 1000)
 				+ ', 1% high: ' + 1 / (oneLFT / 1000) + ', 0.1% high: ' + 1 / (zeroPointOneLFT / 1000) + ', max: ' + 1 / (minFT / 1000));
+			
 			this.resetCamera();
-
+	
 			let stringRepresentation = '';
 			for (const deltaTime of deltaTimes) {
 				stringRepresentation += resolution.x + 'x' + resolution.y + ',' + InstancingMethod[this.sceneManager.mappings!.instancingMethod] + ',' + this.sceneManager.mappings!.quadtreeDepth + ',' + this.sceneManager.mappings!.basicMappings.glyphAtlas + ',' + this.sceneManager.mappings!.shadowMapSettings.enabled + ',' + deltaTime + ',' + (1000 / deltaTime) + '\n';
 			}
-
+	
 			this.benchmarkResults = this.benchmarkResults + stringRepresentation;
-
+	
 			console.log('\n----------\nEnd of benchmark.\n----------\n\n');
+	
+			// 🔹 SOLICITAR AL USUARIO EL NOMBRE Y LA DESCRIPCIÓN
+			const name = prompt('Ingrese el nombre del benchmark:', `Benchmark ${new Date().toISOString().slice(0, 19).replace('T', ' ')}`);
+			const description = prompt('Ingrese una descripción para el benchmark:', 'Este benchmark mide el rendimiento del renderizado en diferentes configuraciones.');
+	
+			if (name && description) {
+				console.log('Subiendo archivo con nombre y descripción...');
+				this.uploadBenchmarkResult(name, description);
+			} else {
+				console.log('Cancelado. No se subirá el benchmark.');
+			}
 		};
-
+	
 		requestAnimationFrame(callback);
 	}
-
-	public downloadBenchmarkResult(): void {
-		let instancingMethod: string = '';
-		if (this.sceneManager.mappings!.instancingMethod === InstancingMethod.None) instancingMethod = 'none';
-		else if (this.sceneManager.mappings!.instancingMethod === InstancingMethod.InstancedMesh) instancingMethod = 'im';
-		else if (this.sceneManager.mappings!.instancingMethod === InstancingMethod.InstancedBufferGeometry) instancingMethod = 'ibg';
-
-		let glyphAtlasResolution: string = '';
-		if (this.sceneManager.mappings!.basicMappings.glyphAtlas === 'lodAtlas') glyphAtlasResolution = 'highres';
-		else if (this.sceneManager.mappings!.basicMappings.glyphAtlas === 'lodAtlas_verysmall') glyphAtlasResolution = 'lowres';
-
-		let shadows: string = '';
-		if (this.sceneManager.mappings!.shadowMapSettings.enabled) shadows = 'shadows';
-		else shadows = 'plain';
-
-		const file = new File(
-			[this.benchmarkResults],
-			instancingMethod + '-' + glyphAtlasResolution + '-' + shadows + '.csv',
-			{ type: 'text/csv' });
-
-		const link = document.createElement('a');
-		const url = URL.createObjectURL(file);
-
-		link.href = url;
-		link.download = file.name;
-		document.body.appendChild(link);
-		link.click();
-
-		document.body.removeChild(link);
-		window.URL.revokeObjectURL(url);
+	
+	public async uploadBenchmarkResult(name: string, description: string): Promise<void> {
+		let instancingMethod: string = this.sceneManager.mappings!.instancingMethod === InstancingMethod.None ? 'none' : 
+									   this.sceneManager.mappings!.instancingMethod === InstancingMethod.InstancedMesh ? 'im' : 'ibg';
+	
+		let glyphAtlasResolution: string = this.sceneManager.mappings!.basicMappings.glyphAtlas === 'lodAtlas' ? 'highres' : 
+										   this.sceneManager.mappings!.basicMappings.glyphAtlas === 'lodAtlas_verysmall' ? 'lowres' : '';
+	
+		let shadows: string = this.sceneManager.mappings!.shadowMapSettings.enabled ? 'shadows' : 'plain';
+	
+		const fileName = `${instancingMethod}-${glyphAtlasResolution}-${shadows}.csv`;
+		const file = new File([this.benchmarkResults], fileName, { type: 'text/csv' });
+	
+		// Crear un FormData para enviar el archivo junto con los nuevos campos
+		const formData = new FormData();
+		formData.append('name', name);  // Nuevo campo
+		formData.append('description', description);  // Nuevo campo
+		formData.append('benchmark_file', file);
+	
+		try {
+			const token = localStorage.getItem('token'); // Asegúrate de que haya autenticación
+			if (!token) {
+				console.error('No se encontró el token de autenticación');
+				return;
+			}
+	
+			const response = await fetch('http://localhost:8000/api/benchmark-reports/', {
+				method: 'POST',
+				headers: {
+					'Authorization': `Token ${token}`
+				},
+				body: formData
+			});
+	
+			if (!response.ok) {
+				throw new Error('Error al subir el archivo de benchmark');
+			}
+	
+			console.log('Archivo de benchmark subido exitosamente');
+		} catch (error) {
+			console.error('Error al subir el archivo de benchmark:', error);
+		}
 	}
+	
 }

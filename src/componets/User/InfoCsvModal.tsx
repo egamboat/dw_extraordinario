@@ -3,7 +3,7 @@ import React from "react";
 interface ModalProps {
     isOpen: boolean;
     onClose: () => void;
-    onConfirm: () => void;
+    onConfirm?: () => void;
     fileName: string;
     description: string;
     rowCount: number;
@@ -50,9 +50,11 @@ const CSVModal: React.FC<ModalProps> = ({
                         Cerrar
                     </button>
 
-                    <button onClick={onConfirm} className="px-4 py-2 bg-purple-500 text-white rounded cursor-pointer">
-                        Ir al Visor
-                    </button>
+                    {onConfirm !== undefined && (
+                        <button onClick={onConfirm} className="px-4 py-2 bg-purple-500 text-white rounded cursor-pointer">
+                            Ir al Visor
+                        </button>
+                    )}
                 </div>
             </div>
         </div>

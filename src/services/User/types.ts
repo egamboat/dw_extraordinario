@@ -19,3 +19,12 @@ export interface UserData {
     last_name: string;
     username: string;
 }
+
+export interface BenchmarkReport {
+    id: number;
+    user: number;
+    name: string;
+    description: string;
+    benchmark_file: string; // URL del archivo
+    generated_at: string;
+}
