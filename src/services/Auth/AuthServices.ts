@@ -13,9 +13,20 @@ export const registerUser = async (userData: any) => {
         const data = await response.json();
 
         if (!response.ok) {
-            const errorMessage = data.detail || data.message || "Error en el registro";
+            let errorMessage = "Error en el registro";
+            
+            if (data.username) {
+                errorMessage = data.username[0];
+            } else if (data.email) {
+                errorMessage = data.email[0];
+            } else if (data.detail) {
+                errorMessage = data.detail;
+            }
+
             throw new Error(errorMessage);
         }
+
+        return data;
 
         return data;
     } catch (error: any) {

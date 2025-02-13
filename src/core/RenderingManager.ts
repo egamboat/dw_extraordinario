@@ -1,7 +1,9 @@
 import * as THREE from 'three';
 //import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import {WorldInHandControls} from '@world-in-hand-controls/threejs-world-in-hand';
-import {InstancingMethod, SceneManager} from './SceneManager.ts';
+import { WorldInHandControls } from '@world-in-hand-controls/threejs-world-in-hand';
+import { InstancingMethod, SceneManager } from './SceneManager.ts';
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js';
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js';
 
 export class RenderingManager {
 	protected updateRequested: boolean;
@@ -26,7 +28,7 @@ export class RenderingManager {
 		this.updateRequested = false;
 		this.div = document.getElementById('root') as HTMLElement;
 
-		this.renderer = new THREE.WebGLRenderer({antialias: false});
+		this.renderer = new THREE.WebGLRenderer({ antialias: false });
 		this.renderer.shadowMap.enabled = true;
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 		this.renderer.setSize(this.div.clientWidth, this.div.clientHeight);
@@ -101,7 +103,7 @@ export class RenderingManager {
 			this.renderer.setRenderTarget(this.simpleRenderTarget);
 
 			//@ts-expect-error three.js type definitions seem to be broken, this works.
-			this.sceneManager.scene.dispatchEvent({type: 'resize'});
+			this.sceneManager.scene.dispatchEvent({ type: 'resize' });
 
 			this.requestUpdate();
 		});
@@ -140,6 +142,48 @@ export class RenderingManager {
 
 			this.controls.update(false);
 		}
+	}
+
+	public addGridLabels() {
+		const scene = this.sceneManager.scene;
+		const minX = this.sceneManager.minX;
+		const maxX = this.sceneManager.maxX;
+		const minY = this.sceneManager.minY;
+		const maxY = this.sceneManager.maxY;
+
+		const rangeX = maxX - minX;
+		const rangeY = maxY - minY;
+
+		const stepX = this.getStepSize(rangeX);
+		const stepY = this.getStepSize(rangeY);
+
+		const fontLoader = new FontLoader();
+
+		fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+			const textMaterial = new THREE.MeshBasicMaterial({ color: 0x000000 });
+			const textSize = rangeX > 1000 ? 0.15 : rangeX > 100 ? 0.1 : 0.05;
+
+			for (let x = Math.ceil(minX / stepX) * stepX; x <= maxX; x += stepX) {
+				const textGeometry = new TextGeometry(x.toFixed(0), { font, size: textSize, height: 0.02 });
+				const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+				textMesh.position.set(x, minY - (textSize * 2), 0);
+				scene.add(textMesh);
+			}
+
+			for (let y = Math.ceil(minY / stepY) * stepY; y <= maxY; y += stepY) {
+				const textGeometry = new TextGeometry(y.toFixed(0), { font, size: textSize, height: 0.02 });
+				const textMesh = new THREE.Mesh(textGeometry, textMaterial);
+				textMesh.position.set(minX - (textSize * 2), y, 0);
+				scene.add(textMesh);
+			}
+		});
+	}
+
+	// 🔹 Función para determinar el tamaño de paso según el rango de valores
+	private getStepSize(range: number): number {
+		if (range > 1000) return 100;  // Si el rango es grande, mostrar solo miles o centenas
+		if (range > 100) return 10;    // Si es mediano, mostrar cada 10
+		return 1;                      // Si es pequeño, mostrar cada 1
 	}
 
 	public resetCamera(): void {
@@ -251,9 +295,9 @@ export class RenderingManager {
 			const zeroPointOneLFT = deltaTimes[Math.round((deltaTimes.length - 1) * 0.001)];
 			const minFT = deltaTimes[0];
 
-			console.log( 'Min fps: ' + 1 / (maxFT / 1000) + ', 0.1% low: ' + 1 / (zeroPointOneHFT / 1000) + ', 1% low: ' + 1 / (oneHFT / 1000)
+			console.log('Min fps: ' + 1 / (maxFT / 1000) + ', 0.1% low: ' + 1 / (zeroPointOneHFT / 1000) + ', 1% low: ' + 1 / (oneHFT / 1000)
 				+ ', median: ' + 1 / (medFT / 1000)
-				+ ', 1% high: ' + 1 / (oneLFT / 1000) + ', 0.1% high: ' + 1 / (zeroPointOneLFT / 1000) + ', max: ' + 1 / (minFT / 1000) );
+				+ ', 1% high: ' + 1 / (oneLFT / 1000) + ', 0.1% high: ' + 1 / (zeroPointOneLFT / 1000) + ', max: ' + 1 / (minFT / 1000));
 			this.resetCamera();
 
 			let stringRepresentation = '';

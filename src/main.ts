@@ -6,6 +6,7 @@ import { SceneManager } from './core/SceneManager.ts';
 
 const renderingManager = new RenderingManager();
 const guiManager = new GuiManager(renderingManager);
+const sceneManager = new SceneManager(renderingManager); // Crear la instancia correctamente
 
 await loadCsvFromLocalStorage();
 async function loadCsvFromLocalStorage() {
@@ -16,7 +17,7 @@ async function loadCsvFromLocalStorage() {
 	if (csvNameElement && csvName) {
 		csvNameElement.textContent = csvName;
 	}
-	
+
 	if (!csvUrl) {
 		console.error("No se encontró 'csv_url' en localStorage. Asegúrate de abrir app.html desde tu app React.");
 		return;
@@ -36,10 +37,10 @@ async function loadCsvFromLocalStorage() {
 	}
 
 	const text = await response.text();
-
 	const csv = parse(text);
-  
-	// 4. Ajuste opcional de columnas (tu función removeLongestCommonPrefix)
+
+	sceneManager.setCsvData(csv);
+	renderingManager.addGridLabels();
 	removeLongestCommonPrefix(csv);
 
 	guiManager.csvAttributes = csv[0];

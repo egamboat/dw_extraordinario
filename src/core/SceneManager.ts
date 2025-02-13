@@ -702,4 +702,25 @@ export class SceneManager {
 		if (warnings.noValidVariant) console.warn('No valid variant could be found for the at least row ' + warnings.noValidVariant + '. The base model of the selected type will be used.');
 	}
 
+	public minX: number = 0;
+    public maxX: number = 0;
+    public minY: number = 0;
+    public maxY: number = 0;
+
+    public setCsvData(csv: CSV) {
+        this.csv = csv;
+
+        // Definir los índices de las columnas X y Y
+        const xIndex = 0; // Cambiar si la estructura del CSV es diferente
+        const yIndex = 1;
+
+        const xValues = csv.slice(1).map(row => parseFloat(row[xIndex]));
+        const yValues = csv.slice(1).map(row => parseFloat(row[yIndex]));
+
+        this.minX = Math.min(...xValues);
+        this.maxX = Math.max(...xValues);
+        this.minY = Math.min(...yValues);
+        this.maxY = Math.max(...yValues);
+    }
+
 }

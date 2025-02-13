@@ -1,12 +1,12 @@
 import * as THREE from 'three';
-import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 /**
  * The complete type of a glyph as specified by the glyph atlas JSON.
  */
 export type Glyph = {
 	baseModel: string,
-	variants: Array<{name: Array<string>} & Record<string, number>>
+	variants: Array<{ name: Array<string> } & Record<string, number>>
 };
 
 /**
